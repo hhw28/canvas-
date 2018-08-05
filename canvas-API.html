@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Canvas API</title>
+  <style>
+    body{
+      margin: 0;
+    }
+    #canvas{
+      background: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="500"></canvas>
+  <!-- Canvas 的默认大小为300像素×150像素
+    请勿在CSS中设置初始宽高，会导致canvas画的图整体等比缩放 -->
+
+  <script>
+    var canvas = document.getElementById('canvas')
+
+    if(canvas.getContext){  //通过测试getContext()方法的存在，检测浏览器是否支持canvas
+
+      var context = canvas.getContext('2d')
+
+      context.fillStyle = 'green'  //填充颜色需要在画之前设置，否则默认为黑色
+      context.strokeStyle = 'red'  //边框线条颜色
+      context.fillRect(20,30,200,100)    //填充矩形
+      context.strokeRect(20,30,200,100)  //矩形边框
+      context.clearRect(30,40,10,10)     //清除指定矩形区域，让清除部分完全透明
+
+      //空心
+      context.lineWidth = 5   //设置绘线的粗细
+      context.beginPath()   //新建一条路径
+      context.moveTo(400,450)
+      context.lineTo(450,450)
+      context.lineTo(425,500)
+      context.lineTo(400,450)
+      context.stroke()      //通过线条来绘制图形轮廓
+      context.closePath()   //闭合路径
+
+      //实心
+      context.beginPath()   //新建一条路径
+      context.moveTo(300,350)
+      context.lineTo(350,350)
+      context.lineTo(325,400)
+      context.fill()        //填充后，没有闭合的路径会自动闭合,无需再调用closePath()
+
+
+      for(var i=0;i<4;i++){
+        for(var j=0;j<3;j++){
+
+          context.beginPath();
+          var x = 180+j*50 // x 坐标值
+          var y = 180+i*50 // y 坐标值
+          var radius = 20 // 圆弧半径
+          var startAngle = 0 // 开始点
+          var endAngle = Math.PI+(Math.PI*j)/2 // 结束点
+          var anticlockwise = i%2==0 ? false : true; // 顺时针或逆时针
+
+          context.arc(x, y, radius, startAngle, endAngle, anticlockwise)
+
+          if (i>1){
+            context.fill()
+          } else {
+            context.stroke()
+          }
+        }
+      }
+
+    }else{
+      console.log('该浏览器不支持canvas')
+    }
+
+  </script>
+</body>
+</html>
