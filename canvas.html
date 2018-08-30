@@ -4,11 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="iconfont/iconfont.css">
   <title>Canvas画板</title>
   <style>
     body,html{
       margin: 0;
       padding: 0;
+    }
+    ul,li{
+      list-style: none;
+      padding:0;
     }
     #canvas{
       background: rgba(0, 0, 0, 0.3);
@@ -16,22 +21,53 @@
     }
     .actions{
       position: absolute;
-      bottom: 0;
-      left: 0;
+      bottom: 40px;
+      text-align: center;
+      width: 100vw;
+    }
+    .actions .iconfont{
+      font-size: 50px;
+      padding: 40px;
+      transition:0.3s;
+    }
+    .actions .active{
+      color: red;
+      font-size: 60px;
+
+    }
+    .colors{
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      width: 60vw;
+    }
+    .colors>li{
+      float: left;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin: 10px;
+      transition: 0.3s;
+    }
+    .colors>li.active{
+      transform: scale(1.3)
+    }
+    .colors>li.red{
+      background: red;
+    }
+    .colors>li.yellow{
+      background: yellow;
+    }
+    .colors>li.green{
+      background: green;
+    }
+    .colors>li.blue{
+      background: blue;
+    }
+    .colors>li.black{
+      background: black;
     }
 
-    .actions #eraser{
-      display: inline-block;
-    }
-    .actions #brush{
-      display: none;
-    }
-    .actions.x > #eraser{
-      display: none;
-    }
-    .actions.x > #brush{
-      display: inline-block;
-    }
   </style>
 </head>
 <body>
@@ -39,9 +75,19 @@
   <!-- Canvas 的默认大小为300像素×150像素
     请勿在CSS中设置初始宽高，会导致canvas画的图整体等比缩放 -->
   <div id=actions class="actions">
-    <button id=eraser >橡皮擦</button>
-    <button id=brush >画笔</button>
+    <i class="iconfont icon-pen active" id="brush"></i>
+    <i class="iconfont icon-eraser" id="eraser"></i>
+    <i class="iconfont icon-delete" id="delete"></i>
+    <i class="iconfont icon-down" id="down"></i>
   </div>
+
+  <ul id=colors class="colors">
+    <li id="black" class="black active"></li>
+    <li id="red" class="red"></li>
+    <li id="yellow" class="yellow"></li>
+    <li id="green" class="green"></li>
+    <li id="blue" class="blue"></li>
+  </ul>
 
 
   <script>
@@ -56,15 +102,44 @@
 /***橡皮擦与画笔的切换***/
       var eraserEnable = false
       eraser.onclick = function(){
-        console.log('eraser')
         eraserEnable = true
-        actions.className = 'actions x'
+        eraser.classList.add('active')
+        brush.classList.remove('active')
       }
       brush.onclick = function(){
-        console.log('brush')
         eraserEnable = false
-        actions.className = 'actions'
+        brush.classList.add('active')
+        eraser.classList.remove('active')
       }
+
+      black.onclick = function(){
+
+        black.classList.add('active')
+        context.fillStyle = 'black'
+        context.strokeStyle = 'black'
+
+      }
+      red.onclick = function(){
+        red.classList.add('active')
+        context.fillStyle = 'red'
+        context.strokeStyle = 'red'
+      }
+      yellow.onclick = function(){
+        yellow.classList.add('active')
+        context.fillStyle = 'yellow'
+        context.strokeStyle = 'yellow'
+      }
+      blue.onclick = function(){
+        blue.classList.add('active')
+        context.fillStyle = 'blue'
+        context.strokeStyle = 'blue'
+      }
+      green.onclick = function(){
+        green.classList.add('active')
+        context.fillStyle = 'green'
+        context.strokeStyle = 'green'
+      }
+
 
 /***监听事件***/
       function listenToUser(canvas){
@@ -92,7 +167,7 @@
 
             if(!isUse){ return }
             if(eraserEnable){
-              context.clearRect(x-5,y-5,10,10)
+              context.clearRect(x-5,y-5,20,20)
             }else{
               var newPoint = {x:x, y:y}
               drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
@@ -170,7 +245,6 @@
     }else{
       console.log('该浏览器不支持canvas')
     }
-
 
 
 
